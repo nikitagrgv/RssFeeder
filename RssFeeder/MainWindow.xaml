@@ -5,8 +5,87 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RssFeeder"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="RSS Feeder" Height="450" Width="800" FontSize="14">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="10" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="10" />
+        </Grid.RowDefinitions>
+
+
+        <TextBlock Grid.Row="1" Grid.Column="1"
+                   x:Name="InfoTextBlock"
+                   FontSize="26">
+            Some text
+        </TextBlock>
+        <!-- -->
+        <!-- <GridSplitter Grid.Row="1" Grid.Column="2" -->
+        <!--               HorizontalAlignment="Center" -->
+        <!--               VerticalAlignment="Stretch" -->
+        <!--               Width="5" -->
+        <!--               Background="LightGray" /> -->
+
+        <GroupBox Grid.Row="1" Grid.Column="3"
+                  Header="Settings">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal"  DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+                    <Button Content="Apply settings" Padding="3"
+                            Click="OnSettingsApplyClicked"/>
+                    <Button Content="Reset settings" Padding="3"
+                            Click="OnSettingsResetClicked"/>
+                </StackPanel>
+
+                <ScrollViewer>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox x:Name="SettingsUseProxy" Content="Use a proxy?" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Proxy URI" Width="105" Padding="0,0,4,0" />
+                            <TextBox x:Name="SettingsProxyURI" Width="140" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Proxy port" Width="105" Padding="0,0,4,0" />
+                            <TextBox x:Name="SettingsProxyPort" Width="140"
+                                     PreviewTextInput="NumberValidationTextBox"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Proxy username" Width="105" Padding="0,0,4,0" />
+                            <TextBox x:Name="SettingsProxyUser" Width="140" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Proxy password" Width="105" Padding="0,0,4,0" />
+                            <PasswordBox x:Name="SettingsProxyPass" Width="140" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Rss feed" Width="105" Padding="0,0,4,0" />
+                            <TextBox x:Name="SettingsRssFeed" Width="140" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Update period" Width="105" Padding="0,0,4,0" />
+                            <TextBox x:Name="SettingsUpdateRate" Width="140"
+                                     PreviewTextInput="NumberValidationTextBox"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </GroupBox>
+
 
     </Grid>
 </Window>
