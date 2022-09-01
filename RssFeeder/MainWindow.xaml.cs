@@ -31,28 +31,31 @@ namespace RssFeeder
         public MainWindow()
         {
             InitializeComponent();
+            AddUriValidator(SettingsProxyURI);
+            AddUriValidator(SettingsRssFeed);
 
             _settings = new Settings("settings.xml");
-
-            _settings.PropertyChanged += OnSettingsChanged;
-
-            OnSettingsChanged(null, null);
-
             UpdateGUISettingsFromObject();
 
+
+            //
+            _settings.PropertyChanged += OnSettingsChanged;
+            OnSettingsChanged(null, null);
+            //
         }
 
         private void OnSettingsChanged(Object sender, PropertyChangedEventArgs args)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine(_settings.UsingProxy.ToString());
-            sb.AppendLine(_settings.ProxyPort.ToString());
-            sb.AppendLine(_settings.ProxyURI);
-            sb.AppendLine(_settings.ProxyUsername);
-            sb.AppendLine(_settings.ProxyPassword);
-            sb.AppendLine(_settings.RssFeed);
-            sb.AppendLine(_settings.UpdatePeriodInSeconds.ToString());
-            InfoTextBlock.Text = sb.ToString();
+            // var sb = new StringBuilder();
+            // sb.AppendLine(_settings.UsingProxy.ToString());
+            // sb.AppendLine(_settings.ProxyPort.ToString());
+            // sb.AppendLine(_settings.ProxyURI);
+            // sb.AppendLine(_settings.ProxyUsername);
+            // sb.AppendLine(_settings.ProxyPassword);
+            // sb.AppendLine(_settings.RssFeed);
+            // sb.AppendLine(_settings.UpdatePeriodInSeconds.ToString());
+            // InfoTextBlock.Text = sb.ToString();
+            InfoTextBlock.Text += args?.PropertyName + "\n";
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -60,14 +63,41 @@ namespace RssFeeder
             e.Handled = !uint.TryParse(e.Text, out _);
         }
 
+        private void AddUriValidator(TextBox tb)
+        {
+            tb.TextChanged += (o, e) =>
+            {
+                if (IsUriValid(tb.Text))
+                {
+                    tb.Background = Brushes.White;
+                }
+                else
+                {
+                    tb.Background = Brushes.IndianRed;
+                }
+            };
+        }
+
+        private bool IsUriValid(string uriString)
+        {
+            return Uri.TryCreate(uriString, UriKind.Absolute, out _);
+        }
+
         private void OnSettingsResetClicked(object sender, RoutedEventArgs e)
         {
+            _settings.DeserializeSettings();
             UpdateGUISettingsFromObject();
         }
 
         private void OnSettingsApplyClicked(object sender, RoutedEventArgs e)
         {
             UpdateObjectSettingsFromGUI();
+        }
+
+        private void OnSettingsDefaultClicked(object sender, RoutedEventArgs e)
+        {
+            _settings.SetDefaultSettings();
+            UpdateGUISettingsFromObject();
         }
 
         private void UpdateGUISettingsFromObject()
@@ -80,6 +110,7 @@ namespace RssFeeder
             SettingsRssFeed.Text = _settings.RssFeed;
             SettingsUpdateRate.Text = _settings.UpdatePeriodInSeconds.ToString();
         }
+
         private void UpdateObjectSettingsFromGUI()
         {
             Debug.Assert(SettingsUseProxy.IsChecked != null, "SettingsUseProxy.IsChecked != null");
@@ -94,5 +125,6 @@ namespace RssFeeder
 
             _settings.SerializeSettings();
         }
+
     }
 }

@@ -21,9 +21,14 @@ namespace RssFeeder.Model.ApplicationSettings
             }
             catch
             {
-                _rawSettings = new RawSettings();
+                SetDefaultSettings();
                 SerializeSettings();
             }
+        }
+
+        public void SetDefaultSettings()
+        {
+            _rawSettings = new RawSettings();
         }
 
         public bool UsingProxy

@@ -21,62 +21,60 @@
         </Grid.RowDefinitions>
 
 
-        <TextBlock Grid.Row="1" Grid.Column="1"
-                   x:Name="InfoTextBlock"
-                   FontSize="26">
-            Some text
-        </TextBlock>
-        <!-- -->
-        <!-- <GridSplitter Grid.Row="1" Grid.Column="2" -->
-        <!--               HorizontalAlignment="Center" -->
-        <!--               VerticalAlignment="Stretch" -->
-        <!--               Width="5" -->
-        <!--               Background="LightGray" /> -->
+        <ScrollViewer Grid.Row="1" Grid.Column="1">
+            <TextBox x:Name="InfoTextBlock"
+                     IsReadOnly="True"
+                     BorderThickness="0">
+                Some text
+            </TextBox>
+        </ScrollViewer>
 
         <GroupBox Grid.Row="1" Grid.Column="3"
                   Header="Settings">
             <DockPanel>
                 <StackPanel Orientation="Horizontal"  DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-                    <Button Content="Apply settings" Padding="3"
+                    <Button Content="Apply" Margin="2" Width="70"
                             Click="OnSettingsApplyClicked"/>
-                    <Button Content="Reset settings" Padding="3"
+                    <Button Content="Reset" Margin="2" Width="70"
                             Click="OnSettingsResetClicked"/>
+                    <Button Content="Default" Margin="2" Width="70"
+                            Click="OnSettingsDefaultClicked"/>
                 </StackPanel>
 
                 <ScrollViewer>
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                    <StackPanel >
+                        <StackPanel Orientation="Horizontal" Margin="2">
                             <CheckBox x:Name="SettingsUseProxy" Content="Use a proxy?" />
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Proxy URI" Width="105" Padding="0,0,4,0" />
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="Proxy URI" Width="105" />
                             <TextBox x:Name="SettingsProxyURI" Width="140" />
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Proxy port" Width="105" Padding="0,0,4,0" />
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="Proxy port" Width="105" />
                             <TextBox x:Name="SettingsProxyPort" Width="140"
                                      PreviewTextInput="NumberValidationTextBox"/>
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Proxy username" Width="105" Padding="0,0,4,0" />
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="Proxy username" Width="105" />
                             <TextBox x:Name="SettingsProxyUser" Width="140" />
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Proxy password" Width="105" Padding="0,0,4,0" />
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="Proxy password" Width="105" />
                             <PasswordBox x:Name="SettingsProxyPass" Width="140" />
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Rss feed" Width="105" Padding="0,0,4,0" />
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="Rss feed" Width="105" />
                             <TextBox x:Name="SettingsRssFeed" Width="140" />
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Update period" Width="105" Padding="0,0,4,0" />
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="Update period" Width="105" />
                             <TextBox x:Name="SettingsUpdateRate" Width="140"
                                      PreviewTextInput="NumberValidationTextBox"/>
                         </StackPanel>
