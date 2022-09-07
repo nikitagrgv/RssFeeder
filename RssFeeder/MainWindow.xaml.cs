@@ -28,7 +28,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        AddUriValidator(SettingsProxyURI);
+        AddUriValidator(SettingsProxyURL);
         AddUriValidator(SettingsRssFeed);
 
         _settings = new Settings("settings.xml");
@@ -214,7 +214,7 @@ public partial class MainWindow : Window
     private void UpdateGUISettingsFromObject()
     {
         SettingsUseProxy.IsChecked = _settings.UsingProxy;
-        SettingsProxyURI.Text = _settings.ProxyURI;
+        SettingsProxyURL.Text = _settings.ProxyURL;
         SettingsProxyPort.Text = _settings.ProxyPort.ToString();
         SettingsProxyUser.Text = _settings.ProxyUsername;
         SettingsProxyPass.Password = _settings.ProxyPassword;
@@ -227,7 +227,7 @@ public partial class MainWindow : Window
         Debug.Assert(SettingsUseProxy.IsChecked != null, "SettingsUseProxy.IsChecked != null");
 
         _settings.UsingProxy = (bool) SettingsUseProxy.IsChecked;
-        _settings.ProxyURI = SettingsProxyURI.Text;
+        _settings.ProxyURL = SettingsProxyURL.Text;
         _settings.ProxyPort = uint.Parse(SettingsProxyPort.Text);
         _settings.ProxyUsername = SettingsProxyUser.Text;
         _settings.ProxyPassword = SettingsProxyPass.Password;

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="RSS Feeder" Height="450" Width="800" FontSize="14">
+        Title="RSS Feeder" Height="600" Width="900" FontSize="14">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -60,8 +60,8 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
-                            <TextBlock Text="Proxy URI" Width="110" />
-                            <TextBox x:Name="SettingsProxyURI" Width="140" />
+                            <TextBlock Text="Proxy URL" Width="110" />
+                            <TextBox x:Name="SettingsProxyURL" Width="140" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">

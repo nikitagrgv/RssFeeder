@@ -4,7 +4,7 @@ public struct RawSettings
 {
     // Proxy settings
     public bool UsingProxy;
-    public string ProxyURI;
+    public string ProxyURL;
     public uint ProxyPort;
     public string ProxyUsername;
     public string ProxyPassword;
@@ -18,8 +18,8 @@ public struct RawSettings
         return new RawSettings
         {
             UsingProxy = false,
-            ProxyURI = "http://example.com",
-            ProxyPort = 80,
+            ProxyURL = "http://12.34.56.78",
+            ProxyPort = 11949,
             ProxyUsername = "username",
             ProxyPassword = "password",
             RssFeed = "https://habr.com/rss/interesting/",

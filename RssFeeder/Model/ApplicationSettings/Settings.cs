@@ -36,12 +36,12 @@ internal class Settings : INotifyPropertyChanged
         }
     }
 
-    public string ProxyURI
+    public string ProxyURL
     {
-        get => _rawSettings.ProxyURI;
+        get => _rawSettings.ProxyURL;
         set
         {
-            _rawSettings.ProxyURI = value;
+            _rawSettings.ProxyURL = value;
             OnPropertyChanged();
         }
     }
