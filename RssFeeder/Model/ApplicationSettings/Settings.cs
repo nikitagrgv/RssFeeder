@@ -28,7 +28,7 @@ namespace RssFeeder.Model.ApplicationSettings
 
         public void SetDefaultSettings()
         {
-            _rawSettings = new RawSettings();
+            _rawSettings = RawSettings.GetDefault();
         }
 
         public bool UsingProxy
@@ -107,6 +107,7 @@ namespace RssFeeder.Model.ApplicationSettings
         {
             using var fs = File.OpenRead(_filename);
             _rawSettings = (RawSettings) _serializer.Deserialize(fs);
+
         }
 
         public void SerializeSettings()

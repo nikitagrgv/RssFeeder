@@ -4,17 +4,31 @@ using System.Text;
 
 namespace RssFeeder.Model.ApplicationSettings
 {
-    public class RawSettings
+    public struct RawSettings
     {
         // Proxy settings
-        public bool UsingProxy { get; set; } = false;
-        public string ProxyURI { get; set; } = "http://example.com";
-        public uint ProxyPort { get; set; } = 80;
-        public string ProxyUsername { get; set; } = "username";
-        public string ProxyPassword { get; set; } = "password";
+        public bool UsingProxy;
+        public string ProxyURI;
+        public uint ProxyPort;
+        public string ProxyUsername;
+        public string ProxyPassword;
 
         // Rss settings
-        public string RssFeed { get; set; } = "https://habr.com/rss/interesting/";
-        public uint UpdatePeriodInSeconds { get; set; } = 60;
+        public string RssFeed;
+        public uint UpdatePeriodInSeconds;
+
+        public static RawSettings GetDefault()
+        {
+            return new RawSettings
+            {
+                UsingProxy = false,
+                ProxyURI = "http://example.com",
+                ProxyPort = 80,
+                ProxyUsername = "username",
+                ProxyPassword = "password",
+                RssFeed = "https://habr.com/rss/interesting/",
+                UpdatePeriodInSeconds = 60,
+            };
+        }
     }
 }

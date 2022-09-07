@@ -8,75 +8,81 @@
         Title="RSS Feeder" Height="450" Width="800" FontSize="14">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="10" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
+        <GroupBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                  Header="Rss Feed">
+            <ScrollViewer>
+                <TextBox x:Name="InfoTextBlock"
+                         IsReadOnly="True"
+                         BorderThickness="0">
+                    Some text
+                </TextBox>
+            </ScrollViewer>
+        </GroupBox>
 
-        <ScrollViewer Grid.Row="1" Grid.Column="1">
-            <TextBox x:Name="InfoTextBlock"
-                     IsReadOnly="True"
-                     BorderThickness="0">
-                Some text
-            </TextBox>
-        </ScrollViewer>
 
-        <GroupBox Grid.Row="1" Grid.Column="3"
+        <GroupBox Grid.Row="1" Grid.Column="1"
+                  Header="Control">
+            <Button Click="ResetTimerButton_OnClick" x:Name="ResetTimerButton" Content="Reset timer" Margin="2"/>
+        </GroupBox>
+
+
+        <GroupBox Grid.Row="0" Grid.Column="1"
                   Header="Settings">
             <DockPanel>
-                <StackPanel Orientation="Horizontal"  DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
                     <Button Content="Apply" Margin="2" Width="70"
-                            Click="OnSettingsApplyClicked"/>
+                            Click="OnSettingsApplyClicked" />
                     <Button Content="Reset" Margin="2" Width="70"
-                            Click="OnSettingsResetClicked"/>
+                            Click="OnSettingsResetClicked" />
                     <Button Content="Default" Margin="2" Width="70"
-                            Click="OnSettingsDefaultClicked"/>
+                            Click="OnSettingsDefaultClicked" />
                 </StackPanel>
 
                 <ScrollViewer>
-                    <StackPanel >
+                    <StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="Rss feed" Width="110" />
+                            <TextBox x:Name="SettingsRssFeed" Width="140" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <TextBlock Text="Update period, s" Width="110" />
+                            <TextBox x:Name="SettingsUpdateRate" Width="140"
+                                     PreviewTextInput="NumberValidationTextBox" />
+                        </StackPanel>
+
                         <StackPanel Orientation="Horizontal" Margin="2">
                             <CheckBox x:Name="SettingsUseProxy" Content="Use a proxy?" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
-                            <TextBlock Text="Proxy URI" Width="105" />
+                            <TextBlock Text="Proxy URI" Width="110" />
                             <TextBox x:Name="SettingsProxyURI" Width="140" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
-                            <TextBlock Text="Proxy port" Width="105" />
+                            <TextBlock Text="Proxy port" Width="110" />
                             <TextBox x:Name="SettingsProxyPort" Width="140"
-                                     PreviewTextInput="NumberValidationTextBox"/>
+                                     PreviewTextInput="NumberValidationTextBox" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
-                            <TextBlock Text="Proxy username" Width="105" />
+                            <TextBlock Text="Proxy username" Width="110" />
                             <TextBox x:Name="SettingsProxyUser" Width="140" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
-                            <TextBlock Text="Proxy password" Width="105" />
+                            <TextBlock Text="Proxy password" Width="110" />
                             <PasswordBox x:Name="SettingsProxyPass" Width="140" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="2">
-                            <TextBlock Text="Rss feed" Width="105" />
-                            <TextBox x:Name="SettingsRssFeed" Width="140" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="2">
-                            <TextBlock Text="Update period" Width="105" />
-                            <TextBox x:Name="SettingsUpdateRate" Width="140"
-                                     PreviewTextInput="NumberValidationTextBox"/>
                         </StackPanel>
 
                     </StackPanel>
