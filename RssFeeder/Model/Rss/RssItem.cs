@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace RssFeeder.Model.Rss
+namespace RssFeeder.Model.Rss;
+
+internal struct RssItem
 {
-    struct RssItem
-    {
-        public string Title;
-        public string Description;
-        public string Link;
-        public DateTime PublicationDate;
-    }
+    public string Title;
+    public string Description;
+    public string Link;
+    public DateTime PublicationDate;
 }

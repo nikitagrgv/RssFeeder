@@ -3,122 +3,120 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 
-namespace RssFeeder.Model.ApplicationSettings
+namespace RssFeeder.Model.ApplicationSettings;
+
+internal class Settings : INotifyPropertyChanged
 {
-    internal class Settings : INotifyPropertyChanged
+    private readonly string _filename;
+    private readonly XmlSerializer _serializer = new(typeof(RawSettings));
+    private RawSettings _rawSettings;
+
+    public Settings(string settingsFilename)
     {
-        private readonly string _filename;
-        private readonly XmlSerializer _serializer = new XmlSerializer(typeof(RawSettings));
-        private RawSettings _rawSettings;
+        _filename = settingsFilename;
 
-        public Settings(string settingsFilename)
+        try
         {
-            _filename = settingsFilename;
-
-            try
-            {
-                DeserializeSettings();
-            }
-            catch
-            {
-                SetDefaultSettings();
-                SerializeSettings();
-            }
+            DeserializeSettings();
         }
-
-        public void SetDefaultSettings()
+        catch
         {
-            _rawSettings = RawSettings.GetDefault();
+            SetDefaultSettings();
+            SerializeSettings();
         }
+    }
 
-        public bool UsingProxy
+    public bool UsingProxy
+    {
+        get => _rawSettings.UsingProxy;
+        set
         {
-            get => _rawSettings.UsingProxy;
-            set
-            {
-                _rawSettings.UsingProxy = value;
-                OnPropertyChanged();
-            }
+            _rawSettings.UsingProxy = value;
+            OnPropertyChanged();
         }
+    }
 
-        public string ProxyURI
+    public string ProxyURI
+    {
+        get => _rawSettings.ProxyURI;
+        set
         {
-            get => _rawSettings.ProxyURI;
-            set
-            {
-                _rawSettings.ProxyURI = value;
-                OnPropertyChanged();
-            }
+            _rawSettings.ProxyURI = value;
+            OnPropertyChanged();
         }
+    }
 
-        public uint ProxyPort
+    public uint ProxyPort
+    {
+        get => _rawSettings.ProxyPort;
+        set
         {
-            get => _rawSettings.ProxyPort;
-            set
-            {
-                _rawSettings.ProxyPort = value;
-                OnPropertyChanged();
-            }
+            _rawSettings.ProxyPort = value;
+            OnPropertyChanged();
         }
+    }
 
-        public string ProxyUsername
+    public string ProxyUsername
+    {
+        get => _rawSettings.ProxyUsername;
+        set
         {
-            get => _rawSettings.ProxyUsername;
-            set
-            {
-                _rawSettings.ProxyUsername = value;
-                OnPropertyChanged();
-            }
+            _rawSettings.ProxyUsername = value;
+            OnPropertyChanged();
         }
+    }
 
-        public string ProxyPassword
+    public string ProxyPassword
+    {
+        get => _rawSettings.ProxyPassword;
+        set
         {
-            get => _rawSettings.ProxyPassword;
-            set
-            {
-                _rawSettings.ProxyPassword = value;
-                OnPropertyChanged();
-            }
+            _rawSettings.ProxyPassword = value;
+            OnPropertyChanged();
         }
+    }
 
-        public string RssFeed
+    public string RssFeed
+    {
+        get => _rawSettings.RssFeed;
+        set
         {
-            get => _rawSettings.RssFeed;
-            set
-            {
-                _rawSettings.RssFeed = value;
-                OnPropertyChanged();
-            }
+            _rawSettings.RssFeed = value;
+            OnPropertyChanged();
         }
+    }
 
-        public uint UpdatePeriodInSeconds
+    public uint UpdatePeriodInSeconds
+    {
+        get => _rawSettings.UpdatePeriodInSeconds;
+        set
         {
-            get => _rawSettings.UpdatePeriodInSeconds;
-            set
-            {
-                _rawSettings.UpdatePeriodInSeconds = value;
-                OnPropertyChanged();
-            }
+            _rawSettings.UpdatePeriodInSeconds = value;
+            OnPropertyChanged();
         }
+    }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler PropertyChanged;
 
-        public void DeserializeSettings()
-        {
-            using var fs = File.OpenRead(_filename);
-            _rawSettings = (RawSettings) _serializer.Deserialize(fs);
+    public void SetDefaultSettings()
+    {
+        _rawSettings = RawSettings.GetDefault();
+    }
 
-        }
+    public void DeserializeSettings()
+    {
+        using var fs = File.OpenRead(_filename);
+        _rawSettings = (RawSettings) _serializer.Deserialize(fs);
+    }
 
-        public void SerializeSettings()
-        {
-            using var fs = File.Open(_filename, FileMode.Create);
-            _serializer.Serialize(fs, _rawSettings);
-        }
+    public void SerializeSettings()
+    {
+        using var fs = File.Open(_filename, FileMode.Create);
+        _serializer.Serialize(fs, _rawSettings);
+    }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

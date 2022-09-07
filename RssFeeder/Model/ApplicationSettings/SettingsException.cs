@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace RssFeeder.Model.ApplicationSettings;
 
-namespace RssFeeder.Model.ApplicationSettings
+internal class SettingsException
 {
-    class SettingsException
-    {
-    }
 }
