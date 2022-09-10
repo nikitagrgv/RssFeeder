@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RssFeeder.ViewModel"
         mc:Ignorable="d"
-        Title="RSS Feeder" Height="600" Width="900" FontSize="14">
+        Title="RSS Feeder" Height="600" Width="900" FontSize="14"
+        MinWidth="700" MinHeight="400">
 
     <Window.Resources>
         <local:DateTimeToStringConverter x:Key="DateConverter" />
+        <local:HtmlToXamlConverter x:Key="DocumentConverter" />
     </Window.Resources>
 
     <Grid>
@@ -22,13 +24,34 @@
         </Grid.RowDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
-                  Header="Rss Feed">
+                  Header="Rss Feed" DataContext="{Binding Feed}">
             <ScrollViewer>
-                <StackPanel x:Name="RssFeedStackPanel" />
+                <ItemsControl ItemsSource="{Binding RssItems}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="3" Background="Bisque">
+                                <StackPanel Margin="4" Background="Ivory">
+                                    <TextBlock FontWeight="Bold"
+                                               TextWrapping="Wrap"
+                                               HorizontalAlignment="Center" >
+                                        <Hyperlink NavigateUri="{Binding Link}"
+                                                   Click="UrlClick">
+                                            <TextBlock Text="{Binding Title}" />
+                                        </Hyperlink>
+                                    </TextBlock>
+                                
+                                    <RichTextBox local:RichTextBoxHelper.DocumentXaml="{Binding Description,Converter={StaticResource DocumentConverter},Mode=OneWay}"/>
+
+                                    <TextBlock Text="{Binding PubDate,Converter={StaticResource DateConverter},Mode=OneWay}"
+                                               HorizontalAlignment="Right"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </ScrollViewer>
         </GroupBox>
-
-
+        
         <GroupBox Grid.Row="1" Grid.Column="1"
                   Header="Control">
             <Button x:Name="ResetTimerButton" Content="Reset timer" Margin="2" />
@@ -38,15 +61,6 @@
         <GroupBox Grid.Row="0" Grid.Column="1"
                   Header="Settings">
             <DockPanel>
-                <!-- <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center"> -->
-                <!--     <Button Content="Apply" Margin="2" Width="70" -->
-                <!--             Click="OnSettingsApplyClicked" /> -->
-                <!--     <Button Content="Load" Margin="2" Width="70" -->
-                <!--             Click="OnSettingsLoadClicked" /> -->
-                <!--     <Button Content="Default" Margin="2" Width="70" -->
-                <!--             Click="OnSettingsDefaultClicked" /> -->
-                <!-- </StackPanel> -->
-                
                 <WrapPanel Orientation="Horizontal" ItemWidth="60" ItemHeight="30"
                            DockPanel.Dock="Bottom" HorizontalAlignment="Center">
                     <Button Content="Apply" Margin="2"
@@ -96,12 +110,8 @@
                             <TextBlock Text="Proxy password" Width="110" />
                             <TextBox Text="{Binding ProxyPassword, UpdateSourceTrigger=PropertyChanged}" Width="140" />
                         </StackPanel>
-
-                        <!-- <StackPanel Orientation="Horizontal" Margin="2"> -->
-                        <!--     <TextBlock Text="SPAMmm" Width="110" /> -->
-                        <!--     <TextBox Text="{Binding Spam,Converter={StaticResource DateConverter},Mode=OneWay}" -->
-                        <!--              Width="140" /> -->
-                        <!-- </StackPanel> -->
+                        
+                        
 
                     </StackPanel>
                 </ScrollViewer>
