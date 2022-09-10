@@ -1,17 +1,95 @@
-﻿namespace RssFeeder.Model.ApplicationSettings;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-public class Settings
+namespace RssFeeder.Model.ApplicationSettings;
+
+public class Settings : INotifyPropertyChanged
 {
-    // Proxy settings
-    public bool UsingProxy { get; set; }
-    public string ProxyUrl { get; set; }
-    public uint ProxyPort { get; set; }
-    public string ProxyUsername { get; set; }
-    public string ProxyPassword { get; set; }
+    private string _rssFeedUrl;
+    private uint _updatePeriodInSeconds;
+    private bool _usingProxy;
+    private string _proxyUrl;
+    private uint _proxyPort;
+    private string _proxyUsername;
+    private string _proxyPassword;
 
-    // Rss settings
-    public string RssFeedUrl { get; set; }
-    public uint UpdatePeriodInSeconds { get; set; }
+    public bool UsingProxy
+    {
+        get => _usingProxy;
+        set
+        {
+            if (value == _usingProxy) return;
+            _usingProxy = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string ProxyUrl
+    {
+        get => _proxyUrl;
+        set
+        {
+            if (value == _proxyUrl) return;
+            _proxyUrl = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public uint ProxyPort
+    {
+        get => _proxyPort;
+        set
+        {
+            if (value == _proxyPort) return;
+            _proxyPort = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string ProxyUsername
+    {
+        get => _proxyUsername;
+        set
+        {
+            if (value == _proxyUsername) return;
+            _proxyUsername = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string ProxyPassword
+    {
+        get => _proxyPassword;
+        set
+        {
+            if (value == _proxyPassword) return;
+            _proxyPassword = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string RssFeedUrl
+    {
+        get => _rssFeedUrl;
+        set
+        {
+            if (value == _rssFeedUrl) return;
+            _rssFeedUrl = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public uint UpdatePeriodInSeconds
+    {
+        get => _updatePeriodInSeconds;
+        set
+        {
+            if (value == _updatePeriodInSeconds) return;
+            _updatePeriodInSeconds = value;
+            OnPropertyChanged();
+        }
+    }
 
     public static Settings GetDefault()
     {
@@ -25,5 +103,12 @@ public class Settings
             RssFeedUrl = "https://habr.com/rss/interesting/",
             UpdatePeriodInSeconds = 60
         };
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

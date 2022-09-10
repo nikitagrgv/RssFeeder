@@ -3,8 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RssFeeder.ViewModel"
         mc:Ignorable="d"
         Title="RSS Feeder" Height="600" Width="900" FontSize="14">
+
+    <Window.Resources>
+        <local:DateTimeToStringConverter x:Key="DateConverter" />
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -32,53 +38,73 @@
         <GroupBox Grid.Row="0" Grid.Column="1"
                   Header="Settings">
             <DockPanel>
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-                    <Button Content="Apply" Margin="2" Width="70"
+                <!-- <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center"> -->
+                <!--     <Button Content="Apply" Margin="2" Width="70" -->
+                <!--             Click="OnSettingsApplyClicked" /> -->
+                <!--     <Button Content="Load" Margin="2" Width="70" -->
+                <!--             Click="OnSettingsLoadClicked" /> -->
+                <!--     <Button Content="Default" Margin="2" Width="70" -->
+                <!--             Click="OnSettingsDefaultClicked" /> -->
+                <!-- </StackPanel> -->
+                
+                <WrapPanel Orientation="Horizontal" ItemWidth="60" ItemHeight="30"
+                           DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+                    <Button Content="Apply" Margin="2"
                             Click="OnSettingsApplyClicked" />
-                    <Button Content="Reset" Margin="2" Width="70"
-                            Click="OnSettingsResetClicked" />
-                    <Button Content="Default" Margin="2" Width="70"
+                    <Button Content="Default" Margin="2"
                             Click="OnSettingsDefaultClicked" />
-                </StackPanel>
+                    <Button Content="Save" Margin="2"
+                            Click="OnSettingsSaveClicked" />
+                    <Button Content="Load" Margin="2"
+                            Click="OnSettingsLoadClicked" />
+                </WrapPanel>
+                
+                
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="2">
+                    <StackPanel DataContext="{Binding SettingsInGui, UpdateSourceTrigger=PropertyChanged}">
+                        <StackPanel Orientation="Horizontal" Margin="2" >
                             <TextBlock Text="Rss feed URL" Width="110" />
-                            <TextBox x:Name="SettingsRssFeedUrl" Width="140" />
+                            <TextBox Text="{Binding RssFeedUrl, UpdateSourceTrigger=PropertyChanged}" Width="140" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
                             <TextBlock Text="Update period, s" Width="110" />
-                            <TextBox x:Name="SettingsUpdateRate" Width="140"
-                                     PreviewTextInput="NumberValidationTextBox" />
+                            <TextBox Text="{Binding UpdatePeriodInSeconds, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="140" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
-                            <CheckBox x:Name="SettingsUseProxy" Content="Use a proxy?" />
+                            <CheckBox IsChecked="{Binding UseProxy, UpdateSourceTrigger=PropertyChanged}"
+                                      Content="Use a proxy?" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
                             <TextBlock Text="Proxy URL" Width="110" />
-                            <TextBox x:Name="SettingsProxyUrl" Width="140" />
+                            <TextBox Text="{Binding ProxyUrl, UpdateSourceTrigger=PropertyChanged}" Width="140" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
                             <TextBlock Text="Proxy port" Width="110" />
-                            <TextBox x:Name="SettingsProxyPort" Width="140"
-                                     PreviewTextInput="NumberValidationTextBox" />
+                            <TextBox Text="{Binding ProxyPort, UpdateSourceTrigger=PropertyChanged}" Width="140" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
                             <TextBlock Text="Proxy username" Width="110" />
-                            <TextBox x:Name="SettingsProxyUser" Width="140" />
+                            <TextBox Text="{Binding ProxyUsername, UpdateSourceTrigger=PropertyChanged}" Width="140" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
                             <TextBlock Text="Proxy password" Width="110" />
-                            <PasswordBox x:Name="SettingsProxyPass" Width="140" />
+                            <TextBox Text="{Binding ProxyPassword, UpdateSourceTrigger=PropertyChanged}" Width="140" />
                         </StackPanel>
+
+                        <!-- <StackPanel Orientation="Horizontal" Margin="2"> -->
+                        <!--     <TextBlock Text="SPAMmm" Width="110" /> -->
+                        <!--     <TextBox Text="{Binding Spam,Converter={StaticResource DateConverter},Mode=OneWay}" -->
+                        <!--              Width="140" /> -->
+                        <!-- </StackPanel> -->
+
 
                     </StackPanel>
                 </ScrollViewer>

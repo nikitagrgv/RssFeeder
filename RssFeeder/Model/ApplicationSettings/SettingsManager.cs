@@ -47,6 +47,7 @@ public class SettingsManager
         Settings = Settings.GetDefault();
     }
 
+    /// <exception cref="CannotSerializeSettingsException"></exception>
     public void Save()
     {
         _serializer.Serialize(_settings);
