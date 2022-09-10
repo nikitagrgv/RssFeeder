@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace RssFeeder.Model.ApplicationSettings;
@@ -8,19 +7,19 @@ public class Settings : INotifyPropertyChanged
 {
     private string _rssFeedUrl;
     private uint _updatePeriodInSeconds;
-    private bool _usingProxy;
+    private bool _useProxy;
     private string _proxyUrl;
     private uint _proxyPort;
     private string _proxyUsername;
     private string _proxyPassword;
 
-    public bool UsingProxy
+    public bool UseProxy
     {
-        get => _usingProxy;
+        get => _useProxy;
         set
         {
-            if (value == _usingProxy) return;
-            _usingProxy = value;
+            if (value == _useProxy) return;
+            _useProxy = value;
             OnPropertyChanged();
         }
     }
@@ -95,7 +94,7 @@ public class Settings : INotifyPropertyChanged
     {
         return new Settings
         {
-            UsingProxy = false,
+            UseProxy = false,
             ProxyUrl = "http://12.34.56.78",
             ProxyPort = 11949,
             ProxyUsername = "username",
@@ -107,7 +106,7 @@ public class Settings : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    private void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

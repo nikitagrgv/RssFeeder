@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Xml.Serialization;
 
 namespace RssFeeder.Model.ApplicationSettings;
@@ -13,7 +12,7 @@ internal class SettingsSerializer
     {
         _filename = filename;
     }
-    
+
     /// <exception cref="CannotDeserializeSettingsException" />
     public Settings Deserialize()
     {
@@ -28,7 +27,7 @@ internal class SettingsSerializer
             throw new CannotDeserializeSettingsException();
         }
     }
-    
+
     /// <exception cref="CannotSerializeSettingsException"></exception>
     public void Serialize(Settings settings)
     {
@@ -37,7 +36,7 @@ internal class SettingsSerializer
             using var fs = File.Open(_filename, FileMode.Create);
             _serializer.Serialize(fs, settings);
         }
-        catch (Exception e)
+        catch
         {
             throw new CannotSerializeSettingsException();
         }

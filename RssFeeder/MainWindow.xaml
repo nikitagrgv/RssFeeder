@@ -50,16 +50,14 @@
                 <WrapPanel Orientation="Horizontal" ItemWidth="60" ItemHeight="30"
                            DockPanel.Dock="Bottom" HorizontalAlignment="Center">
                     <Button Content="Apply" Margin="2"
-                            Click="OnSettingsApplyClicked" />
+                            Command="{Binding ApplyCommand}"/>
                     <Button Content="Default" Margin="2"
-                            Click="OnSettingsDefaultClicked" />
+                            Command="{Binding DefaultCommand}"/>
                     <Button Content="Save" Margin="2"
-                            Click="OnSettingsSaveClicked" />
+                            Command="{Binding SaveCommand}"/>
                     <Button Content="Load" Margin="2"
-                            Click="OnSettingsLoadClicked" />
+                            Command="{Binding LoadCommand}"/>
                 </WrapPanel>
-                
-                
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel DataContext="{Binding SettingsInGui, UpdateSourceTrigger=PropertyChanged}">
@@ -104,7 +102,6 @@
                         <!--     <TextBox Text="{Binding Spam,Converter={StaticResource DateConverter},Mode=OneWay}" -->
                         <!--              Width="140" /> -->
                         <!-- </StackPanel> -->
-
 
                     </StackPanel>
                 </ScrollViewer>

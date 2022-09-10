@@ -42,7 +42,7 @@ internal class Parser
             {
                 Items.Clear();
                 
-                if (currentSettings.UsingProxy)
+                if (currentSettings.UseProxy)
                 {
                     var builder = new UriBuilder(currentSettings.ProxyUrl);
                     builder.Port = (int)currentSettings.ProxyPort;
