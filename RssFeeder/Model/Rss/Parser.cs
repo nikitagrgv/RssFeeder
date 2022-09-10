@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,12 +12,12 @@ namespace RssFeeder.Model.Rss;
 
 internal class Parser
 {
-    private readonly Settings _settings;
+    private readonly SettingsManager _settingsManager;
     private CancellationTokenSource _tokenSource = new();
 
-    public Parser(Settings settings)
+    public Parser(SettingsManager settingsManager)
     {
-        _settings = settings;
+        _settingsManager = settingsManager;
     }
 
     public List<ISyndicationItem> Items { get; } = new();
@@ -28,8 +27,8 @@ internal class Parser
 
     public void Run()
     {
-        _settings.PropertyChanged += (sender, args) => _tokenSource.Cancel();
-        var parseThread = new Thread(Parse);
+        _settingsManager.SettingsChanged += () => _tokenSource.Cancel();
+        var parseThread = new Task(Parse);
         parseThread.Start();
     }
 
@@ -37,39 +36,41 @@ internal class Parser
     {
         while (true)
         {
+            var currentSettings = _settingsManager.Settings;
+            
             try
             {
                 Items.Clear();
-
-                if (_settings.UsingProxy)
+                
+                if (currentSettings.UsingProxy)
                 {
-                    var builder = new UriBuilder(_settings.ProxyURL);
-                    builder.Port = (int)_settings.ProxyPort;
+                    var builder = new UriBuilder(currentSettings.ProxyUrl);
+                    builder.Port = (int)currentSettings.ProxyPort;
 
-                    var proxyURI = builder.Uri;
+                    var proxyUri = builder.Uri;
                     
                     NetworkCredential credentials;
-                    if (_settings.ProxyUsername.Length == 0 || _settings.ProxyPassword.Length == 0)
+                    if (currentSettings.ProxyUsername.Length == 0 || currentSettings.ProxyPassword.Length == 0)
                     {
                         credentials = null;
                     }
                     else
                     {
-                        credentials = new NetworkCredential(_settings.ProxyUsername, _settings.ProxyPassword);
+                        credentials = new NetworkCredential(currentSettings.ProxyUsername, currentSettings.ProxyPassword);
                     }
 
-                    var proxy = new WebProxy(proxyURI, true, null, credentials);
-                    System.Net.WebRequest.DefaultWebProxy = proxy;
+                    var proxy = new WebProxy(proxyUri, true, null, credentials);
+                    WebRequest.DefaultWebProxy = proxy;
                 }
                 else
                 {
-                    System.Net.WebRequest.DefaultWebProxy = null;
+                    WebRequest.DefaultWebProxy = null;
                 }
                 
                 
                 
 
-                var rssReader = new RssFeedReader(XmlReader.Create(_settings.RssFeed));
+                var rssReader = new RssFeedReader(XmlReader.Create(currentSettings.RssFeedUrl));
 
                 while (await rssReader.Read())
                     if (rssReader.ElementType == SyndicationElementType.Item)
@@ -84,7 +85,7 @@ internal class Parser
 
             try
             {
-                await Task.Delay(TimeSpan.FromSeconds(_settings.UpdatePeriodInSeconds), _tokenSource.Token);
+                await Task.Delay(TimeSpan.FromSeconds(currentSettings.UpdatePeriodInSeconds), _tokenSource.Token);
             }
             catch
             {

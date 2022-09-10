@@ -2,10 +2,10 @@
 
 namespace RssFeeder.Model.Rss;
 
-internal struct RssItem
+internal class RssItem
 {
-    public string Title;
-    public string Description;
-    public string Link;
-    public DateTime PublicationDate;
+    public string Title { get; private set; }
+    public string Description { get; private set; }
+    public string Link { get; private set; }
+    public DateTime PubDate { get; private set; }
 }

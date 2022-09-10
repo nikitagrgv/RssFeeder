@@ -1,122 +1,29 @@
-﻿using System.ComponentModel;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Xml.Serialization;
+﻿namespace RssFeeder.Model.ApplicationSettings;
 
-namespace RssFeeder.Model.ApplicationSettings;
-
-internal class Settings : INotifyPropertyChanged
+public class Settings
 {
-    private readonly string _filename;
-    private readonly XmlSerializer _serializer = new(typeof(RawSettings));
-    private RawSettings _rawSettings;
+    // Proxy settings
+    public bool UsingProxy { get; set; }
+    public string ProxyUrl { get; set; }
+    public uint ProxyPort { get; set; }
+    public string ProxyUsername { get; set; }
+    public string ProxyPassword { get; set; }
 
-    public Settings(string settingsFilename)
+    // Rss settings
+    public string RssFeedUrl { get; set; }
+    public uint UpdatePeriodInSeconds { get; set; }
+
+    public static Settings GetDefault()
     {
-        _filename = settingsFilename;
-
-        try
+        return new Settings
         {
-            DeserializeSettings();
-        }
-        catch
-        {
-            SetDefaultSettings();
-            SerializeSettings();
-        }
-    }
-
-    public bool UsingProxy
-    {
-        get => _rawSettings.UsingProxy;
-        set
-        {
-            _rawSettings.UsingProxy = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string ProxyURL
-    {
-        get => _rawSettings.ProxyURL;
-        set
-        {
-            _rawSettings.ProxyURL = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public uint ProxyPort
-    {
-        get => _rawSettings.ProxyPort;
-        set
-        {
-            _rawSettings.ProxyPort = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string ProxyUsername
-    {
-        get => _rawSettings.ProxyUsername;
-        set
-        {
-            _rawSettings.ProxyUsername = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string ProxyPassword
-    {
-        get => _rawSettings.ProxyPassword;
-        set
-        {
-            _rawSettings.ProxyPassword = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string RssFeed
-    {
-        get => _rawSettings.RssFeed;
-        set
-        {
-            _rawSettings.RssFeed = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public uint UpdatePeriodInSeconds
-    {
-        get => _rawSettings.UpdatePeriodInSeconds;
-        set
-        {
-            _rawSettings.UpdatePeriodInSeconds = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    public void SetDefaultSettings()
-    {
-        _rawSettings = RawSettings.GetDefault();
-    }
-
-    public void DeserializeSettings()
-    {
-        using var fs = File.OpenRead(_filename);
-        _rawSettings = (RawSettings) _serializer.Deserialize(fs);
-    }
-
-    public void SerializeSettings()
-    {
-        using var fs = File.Open(_filename, FileMode.Create);
-        _serializer.Serialize(fs, _rawSettings);
-    }
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            UsingProxy = false,
+            ProxyUrl = "http://12.34.56.78",
+            ProxyPort = 11949,
+            ProxyUsername = "username",
+            ProxyPassword = "password",
+            RssFeedUrl = "https://habr.com/rss/interesting/",
+            UpdatePeriodInSeconds = 60
+        };
     }
 }
