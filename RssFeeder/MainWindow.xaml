@@ -25,7 +25,7 @@
 
         <GroupBox Grid.Row="1" Grid.Column="1"
                   Header="Control">
-            <Button Click="ResetTimerButton_OnClick" x:Name="ResetTimerButton" Content="Reset timer" Margin="2" />
+            <Button x:Name="ResetTimerButton" Content="Reset timer" Margin="2" />
         </GroupBox>
 
 
@@ -45,8 +45,8 @@
                     <StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
-                            <TextBlock Text="Rss feed" Width="110" />
-                            <TextBox x:Name="SettingsRssFeed" Width="140" />
+                            <TextBlock Text="Rss feed URL" Width="110" />
+                            <TextBox x:Name="SettingsRssFeedUrl" Width="140" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
@@ -61,7 +61,7 @@
 
                         <StackPanel Orientation="Horizontal" Margin="2">
                             <TextBlock Text="Proxy URL" Width="110" />
-                            <TextBox x:Name="SettingsProxyURL" Width="140" />
+                            <TextBox x:Name="SettingsProxyUrl" Width="140" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="2">
