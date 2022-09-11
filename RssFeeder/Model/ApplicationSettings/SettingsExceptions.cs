@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace RssFeeder.Model.ApplicationSettings;
-
-internal class CannotSerializeSettingsException : Exception
+namespace RssFeeder.Model.ApplicationSettings
 {
-}
+    internal class CannotSerializeSettingsException : Exception
+    {
+    }
 
-internal class CannotDeserializeSettingsException : Exception
-{
+    internal class CannotDeserializeSettingsException : Exception
+    {
+    }
 }

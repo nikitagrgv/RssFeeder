@@ -5,110 +5,111 @@ using RssFeeder.Model;
 using RssFeeder.Model.ApplicationSettings;
 using RssFeeder.Model.Rss;
 
-namespace RssFeeder.ViewModel;
-
-internal class ApplicationViewModel : INotifyPropertyChanged
+namespace RssFeeder.ViewModel
 {
-    private readonly SettingsManager _settingsManager;
-
-    private RelayCommand _applyCommand;
-    private RelayCommand _defaultCommand;
-    private RelayCommand _loadCommand;
-    private RelayCommand _saveCommand;
-    
-    private Settings _settingsInGui;
-
-    public ApplicationViewModel()
+    internal class ApplicationViewModel : INotifyPropertyChanged
     {
-        _settingsManager = new SettingsManager("settings.xml");
-        _settingsInGui = _settingsManager.Settings;
+        private readonly SettingsManager _settingsManager;
 
-        ProxyHandler.SetProxyFromSettings(_settingsManager.Settings);
-        
-        Feed = new Feed(_settingsManager);
-        Feed.UpdateRssFeedItems();
-    }
+        private RelayCommand _applyCommand;
+        private RelayCommand _defaultCommand;
+        private RelayCommand _loadCommand;
+        private RelayCommand _saveCommand;
 
-    public Feed Feed { get; }
-    
-    // The settings in the GUI can be changed without affecting the actual settings
-    // The settings are applied only after clicking the "Apply" button
-    // So we need this property
-    public Settings SettingsInGui
-    {
-        get => _settingsInGui;
-        set
+        private Settings _settingsInGui;
+
+        public ApplicationViewModel()
         {
-            _settingsInGui = value;
-            OnPropertyChanged();
+            _settingsManager = new SettingsManager("settings.xml");
+            _settingsInGui = _settingsManager.Settings;
+
+            ProxyHandler.SetProxyFromSettings(_settingsManager.Settings);
+
+            Feed = new Feed(_settingsManager);
+            Feed.UpdateRssFeedItems();
         }
-    }
-    
-    public RelayCommand ApplyCommand
-    {
-        get { return _applyCommand ??= new RelayCommand(_ => { UpdateManagerSettingsFromGui(); }); }
-    }
 
-    public RelayCommand LoadCommand
-    {
-        get
+        public Feed Feed { get; }
+
+        // The settings in the GUI can be changed without affecting the actual settings
+        // The settings are applied only after clicking the "Apply" button
+        // So we need this property
+        public Settings SettingsInGui
         {
-            return _loadCommand ??= new RelayCommand(_ =>
+            get => _settingsInGui;
+            set
             {
-                _settingsManager.LoadOrDefault();
-                UpdateGuiSettingsFromManager();
-            });
+                _settingsInGui = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
-    public RelayCommand DefaultCommand
-    {
-        get
+        public RelayCommand ApplyCommand
         {
-            return _defaultCommand ??= new RelayCommand(_ =>
-            {
-                _settingsManager.SetDefaultSettings();
-                UpdateGuiSettingsFromManager();
-            });
+            get { return _applyCommand ??= new RelayCommand(_ => { UpdateManagerSettingsFromGui(); }); }
         }
-    }
 
-    public RelayCommand SaveCommand
-    {
-        get
+        public RelayCommand LoadCommand
         {
-            return _saveCommand ??= new RelayCommand(_ =>
+            get
             {
-                try
+                return _loadCommand ??= new RelayCommand(_ =>
                 {
-                    _settingsManager.Save();
-                }
-                catch
-                {
-                    MessageBox.Show(
-                        "Unable to save settings",
-                        "Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
-            });
+                    _settingsManager.LoadOrDefault();
+                    UpdateGuiSettingsFromManager();
+                });
+            }
         }
-    }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        public RelayCommand DefaultCommand
+        {
+            get
+            {
+                return _defaultCommand ??= new RelayCommand(_ =>
+                {
+                    _settingsManager.SetDefaultSettings();
+                    UpdateGuiSettingsFromManager();
+                });
+            }
+        }
 
-    private void UpdateManagerSettingsFromGui()
-    {
-        _settingsManager.Settings = SettingsInGui;
-    }
+        public RelayCommand SaveCommand
+        {
+            get
+            {
+                return _saveCommand ??= new RelayCommand(_ =>
+                {
+                    try
+                    {
+                        _settingsManager.Save();
+                    }
+                    catch
+                    {
+                        MessageBox.Show(
+                            "Unable to save settings",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
+                });
+            }
+        }
 
-    private void UpdateGuiSettingsFromManager()
-    {
-        SettingsInGui = _settingsManager.Settings;
-    }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        private void UpdateManagerSettingsFromGui()
+        {
+            _settingsManager.Settings = SettingsInGui;
+        }
+
+        private void UpdateGuiSettingsFromManager()
+        {
+            SettingsInGui = _settingsManager.Settings;
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

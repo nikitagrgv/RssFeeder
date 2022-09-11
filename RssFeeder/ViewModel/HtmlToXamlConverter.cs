@@ -3,27 +3,27 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace RssFeeder.ViewModel;
-
-public class HtmlToXamlConverter : IValueConverter
+namespace RssFeeder.ViewModel
 {
-
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public class HtmlToXamlConverter : IValueConverter
     {
-        try
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string html = (string)value;
-            var xaml = HTMLConverter.HtmlToXamlConverter.ConvertHtmlToXaml(html, true);
-            return xaml;
+            try
+            {
+                var html = (string) value;
+                var xaml = HTMLConverter.HtmlToXamlConverter.ConvertHtmlToXaml(html, true);
+                return xaml;
+            }
+            catch
+            {
+                return "";
+            }
         }
-        catch
-        {
-            return "";
-        }
-    }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        return DependencyProperty.UnsetValue;
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return DependencyProperty.UnsetValue;
+        }
     }
 }

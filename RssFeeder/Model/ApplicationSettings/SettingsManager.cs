@@ -1,55 +1,56 @@
 ﻿using System;
 
-namespace RssFeeder.Model.ApplicationSettings;
-
-public class SettingsManager
+namespace RssFeeder.Model.ApplicationSettings
 {
-    private readonly SettingsSerializer _serializer;
-    private Settings _settings;
-
-    public SettingsManager(string settingsFilename)
+    public class SettingsManager
     {
-        _serializer = new SettingsSerializer(settingsFilename);
-        LoadOrDefault();
-    }
+        private readonly SettingsSerializer _serializer;
+        private Settings _settings;
 
-    public Settings Settings
-    {
-        get => _settings;
-        set
+        public SettingsManager(string settingsFilename)
         {
-            _settings = value;
-            OnSettingsChanged();
+            _serializer = new SettingsSerializer(settingsFilename);
+            LoadOrDefault();
         }
-    }
 
-    public event Action SettingsChanged;
-
-    private void OnSettingsChanged()
-    {
-        SettingsChanged?.Invoke();
-    }
-
-    public void LoadOrDefault()
-    {
-        try
+        public Settings Settings
         {
-            Settings = _serializer.Deserialize();
+            get => _settings;
+            set
+            {
+                _settings = value;
+                OnSettingsChanged();
+            }
         }
-        catch (CannotDeserializeSettingsException)
+
+        public event Action SettingsChanged;
+
+        private void OnSettingsChanged()
         {
-            SetDefaultSettings();
+            SettingsChanged?.Invoke();
         }
-    }
 
-    public void SetDefaultSettings()
-    {
-        Settings = Settings.GetDefault();
-    }
+        public void LoadOrDefault()
+        {
+            try
+            {
+                Settings = _serializer.Deserialize();
+            }
+            catch (CannotDeserializeSettingsException)
+            {
+                SetDefaultSettings();
+            }
+        }
 
-    /// <exception cref="CannotSerializeSettingsException"></exception>
-    public void Save()
-    {
-        _serializer.Serialize(_settings);
+        public void SetDefaultSettings()
+        {
+            Settings = Settings.GetDefault();
+        }
+
+        /// <exception cref="CannotSerializeSettingsException"></exception>
+        public void Save()
+        {
+            _serializer.Serialize(_settings);
+        }
     }
 }

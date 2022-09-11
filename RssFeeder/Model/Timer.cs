@@ -1,62 +1,58 @@
 ﻿using System;
 
-namespace RssFeeder.Model;
-
-public class Timer
+namespace RssFeeder.Model
 {
-    private const uint MinPeriodInSeconds = 5;
-
-    // Turn off AutoReset to manually control timer restarting
-    private readonly System.Timers.Timer _timer = new System.Timers.Timer {AutoReset = false};
-
-    public Timer(uint periodInSeconds)
+    public class Timer
     {
-        PeriodInSeconds = periodInSeconds;
-        _timer.Elapsed += (_, _) => OnTimerElapsed();
-    }
+        private const uint MinPeriodInSeconds = 5;
 
-    public uint PeriodInSeconds
-    {
-        get => (uint) _timer.Interval / 1000;
-        set
+        // Turn off AutoReset to manually control timer restarting
+        private readonly System.Timers.Timer _timer = new() {AutoReset = false};
+
+        public Timer(uint periodInSeconds)
         {
-            if (value < MinPeriodInSeconds)
+            PeriodInSeconds = periodInSeconds;
+            _timer.Elapsed += (_, _) => OnTimerElapsed();
+        }
+
+        public uint PeriodInSeconds
+        {
+            get => (uint) _timer.Interval / 1000;
+            set
             {
-                _timer.Interval = MinPeriodInSeconds * 1000;
+                if (value < MinPeriodInSeconds)
+                    _timer.Interval = MinPeriodInSeconds * 1000;
+                else
+                    _timer.Interval = value * 1000;
+
+                Restart();
             }
-            else
-            {
-                _timer.Interval = value * 1000;
-            }
-            
+        }
+
+        public event Action TimerElapsed;
+
+        private void OnTimerElapsed()
+        {
+            TimerElapsed?.Invoke();
+
+            // Restart the timer only after all is done in the event handlers
             Restart();
         }
-    }
 
-    public event Action TimerElapsed;
-    
-    private void OnTimerElapsed()
-    {
-        TimerElapsed?.Invoke();
-        
-        // Restart the timer only after all is done in the event handlers
-        Restart();
-    }
+        public void Restart()
+        {
+            Stop();
+            Start();
+        }
 
-    public void Restart()
-    {
-        Stop();
-        Start();
-    }
+        public void Start()
+        {
+            _timer.Start();
+        }
 
-    public void Start()
-    {
-        _timer.Start();
+        public void Stop()
+        {
+            _timer.Stop();
+        }
     }
-    
-    public void Stop()
-    {
-        _timer.Stop();
-    }
-    
 }

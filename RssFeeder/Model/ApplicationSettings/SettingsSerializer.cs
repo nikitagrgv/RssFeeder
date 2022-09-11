@@ -1,44 +1,45 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 
-namespace RssFeeder.Model.ApplicationSettings;
-
-internal class SettingsSerializer
+namespace RssFeeder.Model.ApplicationSettings
 {
-    private readonly string _filename;
-    private readonly XmlSerializer _serializer = new(typeof(Settings));
-
-    public SettingsSerializer(string filename)
+    internal class SettingsSerializer
     {
-        _filename = filename;
-    }
+        private readonly string _filename;
+        private readonly XmlSerializer _serializer = new(typeof(Settings));
 
-    /// <exception cref="CannotDeserializeSettingsException" />
-    public Settings Deserialize()
-    {
-        try
+        public SettingsSerializer(string filename)
         {
-            using var fs = File.OpenRead(_filename);
-            var settings = (Settings) _serializer.Deserialize(fs);
-            return settings;
+            _filename = filename;
         }
-        catch
-        {
-            throw new CannotDeserializeSettingsException();
-        }
-    }
 
-    /// <exception cref="CannotSerializeSettingsException"></exception>
-    public void Serialize(Settings settings)
-    {
-        try
+        /// <exception cref="CannotDeserializeSettingsException" />
+        public Settings Deserialize()
         {
-            using var fs = File.Open(_filename, FileMode.Create);
-            _serializer.Serialize(fs, settings);
+            try
+            {
+                using var fs = File.OpenRead(_filename);
+                var settings = (Settings) _serializer.Deserialize(fs);
+                return settings;
+            }
+            catch
+            {
+                throw new CannotDeserializeSettingsException();
+            }
         }
-        catch
+
+        /// <exception cref="CannotSerializeSettingsException"></exception>
+        public void Serialize(Settings settings)
         {
-            throw new CannotSerializeSettingsException();
+            try
+            {
+                using var fs = File.Open(_filename, FileMode.Create);
+                _serializer.Serialize(fs, settings);
+            }
+            catch
+            {
+                throw new CannotSerializeSettingsException();
+            }
         }
     }
 }
