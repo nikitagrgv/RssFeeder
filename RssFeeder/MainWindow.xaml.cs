@@ -16,9 +16,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        var settingsManager = new SettingsManager("settings.xml");
-        
-        DataContext = new ApplicationViewModel(settingsManager);
+        DataContext = new ApplicationViewModel();
     }
     
     private void UrlClick(object sender, RoutedEventArgs e)

@@ -57,8 +57,14 @@ internal class Feed
         }
         catch
         {
-            ShowError();
+            ShowErrorInItemsList();
         }
+    }
+
+    private static RssFeedReader GetRssReaderFromUrl(string rssFeedUrl)
+    {
+        var rssReader = new RssFeedReader(XmlReader.Create(rssFeedUrl));
+        return rssReader;
     }
 
     private static string GetLinkFromRssItem(ISyndicationItem syndicationItem)
@@ -70,13 +76,7 @@ internal class Feed
         return rssItemLink;
     }
 
-    private static RssFeedReader GetRssReaderFromUrl(string rssFeedUrl)
-    {
-        var rssReader = new RssFeedReader(XmlReader.Create(rssFeedUrl));
-        return rssReader;
-    }
-
-    private void ShowError()
+    private void ShowErrorInItemsList()
     {
         var errorItem = new RssItem
         {

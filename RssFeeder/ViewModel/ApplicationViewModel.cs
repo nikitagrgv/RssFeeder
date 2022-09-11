@@ -18,12 +18,12 @@ internal class ApplicationViewModel : INotifyPropertyChanged
     
     private Settings _settingsInGui;
 
-    public ApplicationViewModel(SettingsManager settingsManager)
+    public ApplicationViewModel()
     {
-        _settingsManager = settingsManager;
+        _settingsManager = new SettingsManager("settings.xml");
         _settingsInGui = _settingsManager.Settings;
 
-        ProxyHandler.SetProxyFromSettings(settingsManager.Settings);
+        ProxyHandler.SetProxyFromSettings(_settingsManager.Settings);
         
         Feed = new Feed(_settingsManager);
         Feed.UpdateRssFeedItems();
