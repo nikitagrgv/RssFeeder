@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading;
 
-namespace RssFeeder.ViewModel;
+namespace RssFeeder.Model;
 
 // Source
 // https://stackoverflow.com/a/2104750/19031745

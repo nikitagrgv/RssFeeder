@@ -1,19 +1,7 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Markup;
-using System.Windows.Media;
-using System.Windows.Threading;
-using HTMLConverter;
-using Microsoft.SyndicationFeed;
 using RssFeeder.Model.ApplicationSettings;
-using RssFeeder.Model.Rss;
 using RssFeeder.ViewModel;
 
 
@@ -35,10 +23,10 @@ public partial class MainWindow : Window
     
     private void UrlClick(object sender, RoutedEventArgs e)
     {
-        string url = ((Hyperlink) sender).NavigateUri.ToString();
-
         try
         {
+            var url = ((Hyperlink) sender).NavigateUri.ToString();
+            
             var process = new ProcessStartInfo
             {
                 FileName = url,
@@ -49,7 +37,7 @@ public partial class MainWindow : Window
         catch
         {
             MessageBox.Show(
-                $"Unable to go to the URL: {url}",
+                $"Unable to go to the URL",
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +20,7 @@ public class RichTextBoxHelper : DependencyObject
         new FrameworkPropertyMetadata
         {
             BindsTwoWayByDefault = true,
-            PropertyChangedCallback = (obj, e) =>
+            PropertyChangedCallback = (obj, _) =>
             {
                 var richTextBox = (RichTextBox) obj;
                 var xaml = GetDocumentXaml(richTextBox);

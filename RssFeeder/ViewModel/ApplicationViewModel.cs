@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Threading;
+using RssFeeder.Model;
 using RssFeeder.Model.ApplicationSettings;
 using RssFeeder.Model.Rss;
 
@@ -29,12 +23,13 @@ internal class ApplicationViewModel : INotifyPropertyChanged
         _settingsManager = settingsManager;
         _settingsInGui = _settingsManager.Settings;
 
-        Feed = new Feed();
+        ProxyHandler.SetProxyFromSettings(settingsManager.Settings);
         
-        Feed.Start();
+        Feed = new Feed(_settingsManager);
+        Feed.UpdateRssFeedItems();
     }
 
-    public Feed Feed { get; set; }
+    public Feed Feed { get; }
     
     // The settings in the GUI can be changed without affecting the actual settings
     // The settings are applied only after clicking the "Apply" button
@@ -51,14 +46,14 @@ internal class ApplicationViewModel : INotifyPropertyChanged
     
     public RelayCommand ApplyCommand
     {
-        get { return _applyCommand ??= new RelayCommand(o => { UpdateManagerSettingsFromGui(); }); }
+        get { return _applyCommand ??= new RelayCommand(_ => { UpdateManagerSettingsFromGui(); }); }
     }
 
     public RelayCommand LoadCommand
     {
         get
         {
-            return _loadCommand ??= new RelayCommand(o =>
+            return _loadCommand ??= new RelayCommand(_ =>
             {
                 _settingsManager.LoadOrDefault();
                 UpdateGuiSettingsFromManager();
@@ -70,7 +65,7 @@ internal class ApplicationViewModel : INotifyPropertyChanged
     {
         get
         {
-            return _defaultCommand ??= new RelayCommand(o =>
+            return _defaultCommand ??= new RelayCommand(_ =>
             {
                 _settingsManager.SetDefaultSettings();
                 UpdateGuiSettingsFromManager();
@@ -82,7 +77,7 @@ internal class ApplicationViewModel : INotifyPropertyChanged
     {
         get
         {
-            return _saveCommand ??= new RelayCommand(o =>
+            return _saveCommand ??= new RelayCommand(_ =>
             {
                 try
                 {

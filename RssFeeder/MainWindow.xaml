@@ -20,10 +20,9 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+        <GroupBox Grid.Row="0" Grid.Column="0"
                   Header="Rss Feed" DataContext="{Binding Feed}">
             <ScrollViewer>
                 <ItemsControl ItemsSource="{Binding RssItems}">
@@ -32,15 +31,16 @@
                             <Border BorderThickness="3" Background="Bisque">
                                 <StackPanel Margin="4" Background="Ivory">
                                     <TextBlock FontWeight="Bold"
-                                               TextWrapping="Wrap"
                                                HorizontalAlignment="Center" >
                                         <Hyperlink NavigateUri="{Binding Link}"
                                                    Click="UrlClick">
-                                            <TextBlock Text="{Binding Title}" />
+                                            <TextBlock Text="{Binding Title}"
+                                                       TextWrapping="Wrap"/>
                                         </Hyperlink>
                                     </TextBlock>
                                 
-                                    <RichTextBox local:RichTextBoxHelper.DocumentXaml="{Binding Description,Converter={StaticResource DocumentConverter},Mode=OneWay}"/>
+                                    <RichTextBox IsReadOnly="True"
+                                        local:RichTextBoxHelper.DocumentXaml="{Binding DescriptionHtml,Converter={StaticResource DocumentConverter},Mode=OneWay}"/>
 
                                     <TextBlock Text="{Binding PubDate,Converter={StaticResource DateConverter},Mode=OneWay}"
                                                HorizontalAlignment="Right"/>
@@ -51,12 +51,6 @@
                 </ItemsControl>
             </ScrollViewer>
         </GroupBox>
-        
-        <GroupBox Grid.Row="1" Grid.Column="1"
-                  Header="Control">
-            <Button x:Name="ResetTimerButton" Content="Reset timer" Margin="2" />
-        </GroupBox>
-
 
         <GroupBox Grid.Row="0" Grid.Column="1"
                   Header="Settings">

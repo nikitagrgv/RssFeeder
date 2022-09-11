@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows;
-using RssFeeder.ViewModel;
+using RssFeeder.Model.ApplicationSettings;
+using System.Xml;
+using Microsoft.SyndicationFeed;
+using Microsoft.SyndicationFeed.Rss;
+
 
 namespace RssFeeder.Model.Rss;
 
@@ -10,26 +12,78 @@ internal class Feed
 {
     public ObservableCollection<RssItem> RssItems { get; set; } = new AsyncObservableCollection<RssItem>();
 
-    // TODO del
-    private string test = @"<p>В наше время нейросетью уже мало кого удивишь, эти штуки умеют обрабатывать видео, вести диалог с человеком, выполнять поиск материалов в интернете, писать музыку, распознавать объекты на фото, помогают обрабатывать фото и многое другое. Сегодня я хочу рассказать о сетке рисующей картинки —&nbsp;<a href=""https://www.midjourney.com/home/"" rel=""noopener noreferrer nofollow"">Midjourney</a>.</p><p>Миджорни умеет распознавать текст и интерпретировать его в картинки. Для этого необходимо на английском языке описать сюжет, направить его на обработку сетке и дождаться результата. После полученный результат можно немного модернизировать, увеличить его качество и скачать.</p><p>Получаются вот такие картинки.</p> <a href=""https://habr.com/ru/post/687524/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=687524#habracut"">Читать далее</a>";
+    private readonly Timer _timer;
+    private readonly SettingsManager _settingsManager;
     
-    public Feed()
+    public Feed(SettingsManager settingsManager)
     {
-        RssItems.Add(new RssItem {Title = "fjldsj fjgf ogsj gjs gj gjsd gj sgjs gjsgj", Description = test, Link = "htf/11.3.php", PubDate = DateTime.Now});
-    }
-    
-    public void Start()
-    {
-        var task = new Task(async () =>
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                var rssItem = new RssItem {Title = "Title1", Description = test, Link = "https://metanit.com/sharp/wpf/11.3.php", PubDate = DateTime.Now};
-                RssItems.Add(rssItem);
-                await Task.Delay(300);
-            }
-        });
-        task.Start();
+        _settingsManager = settingsManager;
+        settingsManager.SettingsChanged += OnSettingsChanged;
+        
+        _timer = new Timer(_settingsManager.Settings.UpdatePeriodInSeconds);
+        _timer.TimerElapsed += UpdateRssFeedItems;
     }
 
+    private void OnSettingsChanged()
+    {
+        var s = _settingsManager.Settings;
+        _timer.PeriodInSeconds = s.UpdatePeriodInSeconds;
+        ProxyHandler.SetProxyFromSettings(s);
+        
+        UpdateRssFeedItems();
+    }
+
+    public async void UpdateRssFeedItems()
+    {
+        try
+        {
+            RssItems.Clear();
+
+            var rssReader = GetRssReaderFromUrl(_settingsManager.Settings.RssFeedUrl);
+
+            while (await rssReader.Read())
+                if (rssReader.ElementType == SyndicationElementType.Item)
+                {
+                    var syndicationItem = await rssReader.ReadItem();
+
+                    RssItems.Add(new RssItem
+                    {
+                        Title = syndicationItem.Title,
+                        DescriptionHtml = syndicationItem.Description,
+                        Link = GetLinkFromRssItem(syndicationItem),
+                        PubDate = syndicationItem.Published.LocalDateTime
+                    });
+                }
+        }
+        catch
+        {
+            ShowError();
+        }
+    }
+
+    private static string GetLinkFromRssItem(ISyndicationItem syndicationItem)
+    {
+        using var linksEnumerator = syndicationItem.Links.GetEnumerator();
+        linksEnumerator.MoveNext();
+        var rssItemLink = linksEnumerator.Current?.Uri.ToString() ?? "";
+        
+        return rssItemLink;
+    }
+
+    private static RssFeedReader GetRssReaderFromUrl(string rssFeedUrl)
+    {
+        var rssReader = new RssFeedReader(XmlReader.Create(rssFeedUrl));
+        return rssReader;
+    }
+
+    private void ShowError()
+    {
+        var errorItem = new RssItem
+        {
+            DescriptionHtml = "<h1>Error while loading rss feed</h1>",
+            PubDate = DateTime.Now
+        };
+        RssItems.Clear();
+        RssItems.Add(errorItem);
+    }
 }
