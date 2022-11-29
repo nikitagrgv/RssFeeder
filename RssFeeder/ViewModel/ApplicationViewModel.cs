@@ -99,12 +99,12 @@ namespace RssFeeder.ViewModel
 
         private void UpdateManagerSettingsFromGui()
         {
-            _settingsManager.Settings = SettingsInGui;
+            _settingsManager.Settings = (Settings) SettingsInGui.Clone();
         }
 
         private void UpdateGuiSettingsFromManager()
         {
-            SettingsInGui = _settingsManager.Settings;
+            SettingsInGui = (Settings) _settingsManager.Settings.Clone();
         }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)

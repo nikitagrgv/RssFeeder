@@ -1,9 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace RssFeeder.Model.ApplicationSettings
 {
-    public class Settings : INotifyPropertyChanged
+    public class Settings : INotifyPropertyChanged, ICloneable
     {
         private string _proxyPassword;
         private uint _proxyPort;
@@ -109,6 +110,11 @@ namespace RssFeeder.Model.ApplicationSettings
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }
