@@ -27,4 +27,4 @@
 - Иметь возможность переключения отображения описания в форматированном виде и без форматирования.
 - Реализовать на asp.net mvc/blazor или asp.net spa с использование dotnet core > 2.x или dotnet 5
 
-<img width="60%" src="https://github.com/nikitagrgv/RssFeeder/blob/main/gitassets/image.png?raw=true"><br>
+  <img width="60%" src="https://github.com/nikitagrgv/RssFeeder/blob/master/gitassets/image.png?raw=true"><br>
